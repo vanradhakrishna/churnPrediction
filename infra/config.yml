@@ -1,0 +1,14 @@
+dev:
+  endpoint_name: churn
+  model_name: ml_catalog.ml.churn_model
+  alias: challenger
+
+stage:
+  endpoint_name: churn-stage
+  model_name: ml_catalog.ml.churn_model
+  alias: challenger
+
+prod:
+  endpoint_name: churn-prod
+  model_name: ml_catalog.ml.churn_model
+  alias: production
