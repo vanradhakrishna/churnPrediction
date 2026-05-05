@@ -1,0 +1,34 @@
+name: Deploy to Databricks
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: pip install requests pyyaml
+
+      - name: Deploy
+        run: |
+          BRANCH=${GITHUB_REF##*/}
+
+          if [ "$BRANCH" = "main" ]; then
+            python infra/deploy.py prod
+          elif [ "$BRANCH" = "stage" ]; then
+            python infra/deploy.py stage
+          else
+            python infra/deploy.py dev
+          fi
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
